@@ -1,0 +1,2 @@
+dsn = "test.db"
+log_level = "debug"
