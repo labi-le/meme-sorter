@@ -15,11 +15,11 @@ func NewMethod(db *internal.DB, i *structures.Meme) *method {
 }
 
 func (r method) Create() structures.Response {
-	result := r.DB.Create(r.Item)
-	if result.Error != nil {
+	err := r.DB.Create(r.Item)
+	if err != nil {
 		return structures.Response{
 			Status:      structures.Failed,
-			Description: result.Error.Error(),
+			Description: err.Error(),
 			Data:        []int{},
 		}
 	}
@@ -31,11 +31,11 @@ func (r method) Create() structures.Response {
 	}
 }
 func (r method) Update() structures.Response {
-	result := r.DB.Update(r.Item)
-	if result.Error != nil {
+	err := r.DB.Update(r.Item)
+	if err != nil {
 		return structures.Response{
 			Status:      structures.Failed,
-			Description: result.Error.Error(),
+			Description: err.Error(),
 			Data:        []int{},
 		}
 	}
@@ -47,27 +47,28 @@ func (r method) Update() structures.Response {
 	}
 }
 func (r method) Read() structures.Response {
-	result := r.DB.Take(r.Item.ID)
-	//if result.Error != nil {
-	//	return structures.Response{
-	//		Status:      structures.Failed,
-	//		Description: result.Error.Error(),
-	//		Data:        []int{},
-	//	}
-	//}
+	var meme structures.Meme
+	err := r.DB.Take(r.Item.ID, &meme)
+	if err != nil {
+		return structures.Response{
+			Status:      structures.Failed,
+			Description: err.Error(),
+			Data:        []int{},
+		}
+	}
 
 	return structures.Response{
 		Status:      structures.Success,
 		Description: "item has been deleted",
-		Data:        result,
+		Data:        meme,
 	}
 }
 func (r method) Delete() structures.Response {
-	result := r.DB.Delete(r.Item.ID)
-	if result.Error != nil {
+	err := r.DB.Delete(r.Item.ID)
+	if err.Error != nil {
 		return structures.Response{
 			Status:      structures.Failed,
-			Description: result.Error.Error(),
+			Description: err.Error(),
 			Data:        []int{},
 		}
 	}
