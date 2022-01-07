@@ -19,21 +19,18 @@ func NewDB(c structures.Config) *DB {
 	return &DB{db: conn}
 }
 
-func (conn *DB) Create(item *structures.Meme) *gorm.DB {
-	return conn.db.Create(&item)
+func (conn *DB) Create(item *structures.Meme) error {
+	return conn.db.Create(&item).Error
 }
 
-func (conn *DB) Take(id uint) structures.Meme {
-	var Item structures.Meme
-	conn.db.Take(&Item, id)
-
-	return Item
+func (conn *DB) Take(id uint, item *structures.Meme) error {
+	return conn.db.Take(&item, id).Error
 }
-func (conn *DB) Update(item *structures.Meme) *gorm.DB {
-	return conn.db.Updates(&item)
+func (conn *DB) Update(item *structures.Meme) error {
+	return conn.db.Updates(&item).Error
 }
-func (conn *DB) Delete(id uint) *gorm.DB {
-	return conn.db.Delete(&structures.Meme{}, id)
+func (conn *DB) Delete(id uint) error {
+	return conn.db.Delete(&structures.Meme{}, id).Error
 }
 
 func (conn *DB) Migrate() error {
