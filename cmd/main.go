@@ -7,6 +7,7 @@ import (
 	"log"
 	"meme-sorter/internal"
 	"meme-sorter/internal/structures"
+	"meme-sorter/web"
 )
 
 var (
@@ -37,10 +38,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	Var_dump(db.Take(12))
+	Config.DB = db
 
-	//db.Create(&structures.Meme{
-	//	Code: "sasasaasasaassasasaa",
-	//	Fun:  false,
-	//})
+	err = web.Start(&Config)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
