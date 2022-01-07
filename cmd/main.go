@@ -37,6 +37,7 @@ func main() {
 	if db.Migrate() != nil {
 		log.Fatal(err)
 	}
+	//todo: протестировать апи и залить сервис в проект
 
 	Config.DB = db
 
