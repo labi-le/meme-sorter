@@ -1,3 +1,4 @@
 addr = "0.0.0.0:8000"
 dsn = "test.db"
 log_level = "debug"
+items_dir = "memes"
