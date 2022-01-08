@@ -5,16 +5,16 @@ import (
 )
 
 type method struct {
-	DB   *internal.DB
-	Item *internal.Meme
+	Config *internal.Config
+	Item   *internal.Meme
 }
 
-func NewMethod(db *internal.DB, i *internal.Meme) *method {
-	return &method{Item: i, DB: db}
+func NewMethod(config *internal.Config, i *internal.Meme) *method {
+	return &method{Item: i, Config: config}
 }
 
 func (r method) Create() internal.Response {
-	err := r.DB.Create(r.Item)
+	err := r.Config.DB.Create(r.Item)
 	if err != nil {
 		return internal.Response{
 			Status:      internal.Failed,
@@ -30,7 +30,7 @@ func (r method) Create() internal.Response {
 	}
 }
 func (r method) Update() internal.Response {
-	err := r.DB.Update(r.Item)
+	err := r.Config.DB.Update(r.Item)
 	if err != nil {
 		return internal.Response{
 			Status:      internal.Failed,
@@ -47,7 +47,7 @@ func (r method) Update() internal.Response {
 }
 func (r method) Take() internal.Response {
 	var meme internal.Meme
-	err := r.DB.Take(r.Item.ID, &meme)
+	err := r.Config.DB.Take(r.Item.ID, &meme)
 	if err != nil {
 		return internal.Response{
 			Status:      internal.Failed,
@@ -63,7 +63,7 @@ func (r method) Take() internal.Response {
 	}
 }
 func (r method) Delete() internal.Response {
-	err := r.DB.Delete(r.Item.ID)
+	err := r.Config.DB.Delete(r.Item.ID)
 	if err.Error != nil {
 		return internal.Response{
 			Status:      internal.Failed,
