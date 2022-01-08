@@ -25,9 +25,11 @@ func (conn *DB) Create(item *Meme) error {
 func (conn *DB) Take(id uint, item *Meme) error {
 	return conn.db.Take(&item, id).Error
 }
+
 func (conn *DB) Update(item *Meme) error {
 	return conn.db.Updates(&item).Error
 }
+
 func (conn *DB) Delete(id uint) error {
 	return conn.db.Delete(&Meme{}, id).Error
 }
