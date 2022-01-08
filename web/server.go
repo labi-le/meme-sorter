@@ -114,9 +114,7 @@ func (s *Server) apiResolver(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
-	j, _ := json.Marshal(Item)
-	Var_dump(string(j))
-	method := NewMethod(s.Config.DB, &Item)
+	method := NewMethod(s.Config, &Item)
 
 	var MethodResponse internal.Response
 	switch params["method"] {
@@ -153,6 +151,6 @@ func response(response internal.Response, w http.ResponseWriter) {
 	return
 }
 
-func Var_dump(expression ...interface{}) {
+func VarDump(expression ...interface{}) {
 	fmt.Println(fmt.Sprintf("%#v", expression))
 }
