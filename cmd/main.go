@@ -2,11 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/BurntSushi/toml"
 	"log"
 	"meme-sorter/internal"
-	"meme-sorter/internal/structures"
 	"meme-sorter/web"
 )
 
@@ -18,13 +16,9 @@ func init() {
 	flag.StringVar(&config, "config", "config.toml", "path to config file")
 }
 
-func Var_dump(expression ...interface{}) {
-	fmt.Println(fmt.Sprintf("%#v", expression))
-}
-
 func main() {
 	flag.Parse()
-	Config := structures.Config{}
+	Config := internal.Config{}
 
 	_, err := toml.DecodeFile(config, &Config)
 

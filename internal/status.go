@@ -1,4 +1,4 @@
-package structures
+package internal
 
 const (
 	Success   = "success"

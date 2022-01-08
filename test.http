@@ -1,0 +1,7 @@
+POST localhost:8000/api/take
+Content-Type: application/json
+
+{
+  "id": 1212,
+  "fun": true
+}

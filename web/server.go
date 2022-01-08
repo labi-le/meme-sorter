@@ -2,11 +2,12 @@ package web
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"log"
-	"meme-sorter/internal/structures"
+	"meme-sorter/internal"
 	"net/http"
 	"time"
 )
@@ -15,7 +16,7 @@ type Server struct {
 	router *mux.Router
 	logger *logrus.Logger
 
-	Config *structures.Config
+	Config *internal.Config
 }
 
 // implement
@@ -23,7 +24,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	s.router.ServeHTTP(w, r)
 }
 
-func newServer(config *structures.Config) *Server {
+func newServer(config *internal.Config) *Server {
 	s := &Server{
 		router: mux.NewRouter(),
 		logger: logrus.New(),
@@ -36,7 +37,7 @@ func newServer(config *structures.Config) *Server {
 	return s
 }
 
-func Start(config *structures.Config) error {
+func Start(config *internal.Config) error {
 	srv := newServer(config)
 	srv.configureLogger()
 
@@ -99,13 +100,13 @@ func (s *Server) logRequestMiddleware(next http.Handler) http.Handler {
 func (s *Server) apiResolver(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var Item structures.Meme
+	var Item internal.Meme
 	body, _ := ioutil.ReadAll(r.Body)
 
 	err := json.Unmarshal(body, &Item)
 	if err != nil {
-		response(structures.Response{
-			Status:      structures.Failed,
+		response(internal.Response{
+			Status:      internal.Failed,
 			Description: err.Error(),
 			Data:        []string{},
 		}, w)
@@ -113,16 +114,18 @@ func (s *Server) apiResolver(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
-	var MethodResponse structures.Response
-
+	j, _ := json.Marshal(Item)
+	Var_dump(string(j))
 	method := NewMethod(s.Config.DB, &Item)
+
+	var MethodResponse internal.Response
 	switch params["method"] {
 	case "create":
 		MethodResponse = method.Create()
 	case "update":
 		MethodResponse = method.Update()
 	case "take":
-		MethodResponse = method.Read()
+		MethodResponse = method.Take()
 	case "delete":
 		MethodResponse = method.Delete()
 	}
@@ -131,21 +134,25 @@ func (s *Server) apiResolver(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func response(response structures.Response, w http.ResponseWriter) {
+func response(response internal.Response, w http.ResponseWriter) {
 	switch response.Status {
-	case structures.Success:
+	case internal.Failed:
 		w.WriteHeader(http.StatusBadRequest)
 		break
 
-	case structures.Partially:
+	case internal.Partially:
 		w.WriteHeader(http.StatusPartialContent)
 		break
 
-	case structures.Failed:
+	case internal.Success:
 		w.WriteHeader(http.StatusOK)
 		break
 	}
 
 	_ = json.NewEncoder(w).Encode(response)
 	return
+}
+
+func Var_dump(expression ...interface{}) {
+	fmt.Println(fmt.Sprintf("%#v", expression))
 }

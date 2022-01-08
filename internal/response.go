@@ -1,4 +1,4 @@
-package structures
+package internal
 
 type Response struct {
 	Status      string      `json:"status"`

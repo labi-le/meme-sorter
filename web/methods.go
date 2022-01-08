@@ -2,79 +2,78 @@ package web
 
 import (
 	"meme-sorter/internal"
-	"meme-sorter/internal/structures"
 )
 
 type method struct {
 	DB   *internal.DB
-	Item *structures.Meme
+	Item *internal.Meme
 }
 
-func NewMethod(db *internal.DB, i *structures.Meme) *method {
+func NewMethod(db *internal.DB, i *internal.Meme) *method {
 	return &method{Item: i, DB: db}
 }
 
-func (r method) Create() structures.Response {
+func (r method) Create() internal.Response {
 	err := r.DB.Create(r.Item)
 	if err != nil {
-		return structures.Response{
-			Status:      structures.Failed,
+		return internal.Response{
+			Status:      internal.Failed,
 			Description: err.Error(),
 			Data:        []int{},
 		}
 	}
 
-	return structures.Response{
-		Status:      structures.Success,
+	return internal.Response{
+		Status:      internal.Success,
 		Description: "created!",
 		Data:        []int{},
 	}
 }
-func (r method) Update() structures.Response {
+func (r method) Update() internal.Response {
 	err := r.DB.Update(r.Item)
 	if err != nil {
-		return structures.Response{
-			Status:      structures.Failed,
+		return internal.Response{
+			Status:      internal.Failed,
 			Description: err.Error(),
 			Data:        []int{},
 		}
 	}
 
-	return structures.Response{
-		Status:      structures.Success,
+	return internal.Response{
+		Status:      internal.Success,
 		Description: "item has been updated",
 		Data:        r.Item,
 	}
 }
-func (r method) Read() structures.Response {
-	var meme structures.Meme
+func (r method) Take() internal.Response {
+	var meme internal.Meme
 	err := r.DB.Take(r.Item.ID, &meme)
 	if err != nil {
-		return structures.Response{
-			Status:      structures.Failed,
+		return internal.Response{
+			Status:      internal.Failed,
 			Description: err.Error(),
 			Data:        []int{},
 		}
 	}
 
-	return structures.Response{
-		Status:      structures.Success,
-		Description: "item has been deleted",
+	return internal.Response{
+		Status:      internal.Success,
+		Description: "item received",
 		Data:        meme,
 	}
 }
-func (r method) Delete() structures.Response {
+func (r method) Delete() internal.Response {
 	err := r.DB.Delete(r.Item.ID)
 	if err.Error != nil {
-		return structures.Response{
-			Status:      structures.Failed,
+		return internal.Response{
+			Status:      internal.Failed,
 			Description: err.Error(),
 			Data:        []int{},
 		}
 	}
 
-	return structures.Response{
-		Status:      structures.Success,
+	return internal.Response{
+		Status:      internal.Success,
 		Description: "item has been deleted",
 		Data:        []int{},
 	}
