@@ -10,6 +10,6 @@ type DeletedAt sql.NullTime
 type Meme struct {
 	gorm.Model
 
-	Fun  bool   `json:"Fun"`
-	Path string `json:"Path"`
+	Fun   bool   `json:"Fun"`
+	Image []byte `json:"Image"`
 }
