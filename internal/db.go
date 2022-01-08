@@ -37,3 +37,15 @@ func (conn *DB) Delete(id uint) error {
 func (conn *DB) Migrate() error {
 	return conn.db.AutoMigrate(Meme{})
 }
+
+func (conn *DB) First(item *Meme) error {
+	return conn.db.First(&item).Error
+}
+
+func (conn *DB) Last(item *Meme) error {
+	return conn.db.Last(&item).Error
+}
+
+func (conn *DB) Count(count *int64) error {
+	return conn.db.Model(&Meme{}).Count(count).Error
+}

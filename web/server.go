@@ -103,16 +103,16 @@ func (s *Server) apiResolver(w http.ResponseWriter, r *http.Request) {
 	var Item internal.Meme
 	body, _ := ioutil.ReadAll(r.Body)
 
-	err := json.Unmarshal(body, &Item)
-	if err != nil {
-		response(internal.Response{
-			Status:      internal.Failed,
-			Description: err.Error(),
-			Data:        []string{},
-		}, w)
-	}
-
 	params := mux.Vars(r)
+
+	_ = json.Unmarshal(body, &Item)
+	//if err != nil {
+	//	response(internal.Response{
+	//		Status:      internal.Failed,
+	//		Description: err.Error(),
+	//		Data:        []string{},
+	//	}, w)
+	//}
 
 	method := NewMethod(s.Config, &Item)
 
@@ -120,12 +120,19 @@ func (s *Server) apiResolver(w http.ResponseWriter, r *http.Request) {
 	switch params["method"] {
 	case "create":
 		MethodResponse = method.Create()
+		break
+	case "random":
+		MethodResponse = method.Random()
+		break
 	case "update":
 		MethodResponse = method.Update()
+		break
 	case "take":
 		MethodResponse = method.Take()
+		break
 	case "delete":
 		MethodResponse = method.Delete()
+		break
 	}
 
 	response(MethodResponse, w)

@@ -1,6 +1,7 @@
 package web
 
 import (
+	"math/rand"
 	"meme-sorter/internal"
 )
 
@@ -77,4 +78,20 @@ func (r method) Delete() internal.Response {
 		Description: "item has been deleted",
 		Data:        []int{},
 	}
+}
+
+func (r method) Random() internal.Response {
+	var Count int64
+	err := r.Config.DB.Count(&Count)
+	if err != nil {
+		return internal.Response{
+			Status:      internal.Failed,
+			Description: err.Error(),
+			Data:        []int{},
+		}
+	}
+
+	r.Item.ID = uint(rand.Int63n(Count))
+
+	return r.Take()
 }
