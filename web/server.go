@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
-	"log"
 	"meme-sorter/internal"
 	"net/http"
 	"time"
@@ -47,8 +46,6 @@ func Start(config *internal.Config) error {
 		Handler: srv,
 		Addr:    config.Addr,
 	}
-
-	log.Fatal(server.ListenAndServe())
 
 	return server.ListenAndServe()
 }
