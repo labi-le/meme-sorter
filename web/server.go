@@ -124,7 +124,7 @@ func (s *Server) apiResolver(w http.ResponseWriter, r *http.Request) {
 	case "update":
 		MethodResponse = method.Update()
 		break
-	case "take":
+	case "get":
 		MethodResponse = method.Take()
 		break
 	case "delete":
